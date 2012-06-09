@@ -57,4 +57,9 @@ public class Filial implements Serializable {
     public void setProduto(Collection<Produto> produto) {
         this.produto = produto;
     }
+    
+    @Override
+    public String toString() {
+        return this.cidade +" - "+ this.bairro;
+    }
 }

@@ -16,12 +16,8 @@ public class FormCadFilial extends javax.swing.JDialog {
     public FormCadFilial(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setLocationRelativeTo(null);
-        try {
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Não foi possível conectar ao banco!", "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
-        }
-        atualizarTblEstoque();
+        setLocationRelativeTo(null);        
+        atualizarTblFilial();
     }
 
     public void LimparCampos() {
@@ -42,7 +38,7 @@ public class FormCadFilial extends javax.swing.JDialog {
         jID = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jGravar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jSair = new javax.swing.JButton();
         jExcluir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblFilial = new javax.swing.JTable();
@@ -121,11 +117,11 @@ public class FormCadFilial extends javax.swing.JDialog {
             }
         });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/img_sair.png"))); // NOI18N
-        jButton2.setText("Sair");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+        jSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/img_sair.png"))); // NOI18N
+        jSair.setText("Sair");
+        jSair.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
+                jSairMouseClicked(evt);
             }
         });
 
@@ -220,7 +216,7 @@ public class FormCadFilial extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jGravar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jSair, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -231,11 +227,12 @@ public class FormCadFilial extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jExcluir)
-                    .addComponent(jGravar)
-                    .addComponent(jButton2)
-                    .addComponent(jLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLimpar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jExcluir)
+                        .addComponent(jGravar)
+                        .addComponent(jSair)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -244,9 +241,9 @@ public class FormCadFilial extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+    private void jSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSairMouseClicked
         this.setVisible(false);
-    }//GEN-LAST:event_jButton2MouseClicked
+    }//GEN-LAST:event_jSairMouseClicked
 
 private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jGravarActionPerformed
 
@@ -279,7 +276,7 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     }
 
     jExcluir.setEnabled(false);
-    atualizarTblEstoque();
+    atualizarTblFilial();
 }//GEN-LAST:event_jGravarActionPerformed
 
     private void jExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jExcluirActionPerformed
@@ -296,7 +293,7 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         }
 
         jExcluir.setEnabled(false);
-        atualizarTblEstoque();
+        atualizarTblFilial();
     }//GEN-LAST:event_jExcluirActionPerformed
 
     private void jBairroFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jBairroFocusLost
@@ -345,7 +342,6 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JTextField jBairro;
-    private javax.swing.JButton jButton2;
     private javax.swing.JTextField jCidade;
     private javax.swing.JButton jExcluir;
     private javax.swing.JButton jGravar;
@@ -357,11 +353,12 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private javax.swing.JLabel jNome;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JButton jSair;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblFilial;
     // End of variables declaration//GEN-END:variables
 
-    private void atualizarTblEstoque() {
+    private void atualizarTblFilial() {
         filial = new Filial();
         filialJPA = new FilialJpaController();
         

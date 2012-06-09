@@ -1,7 +1,9 @@
 package br.cesjf.lp3.app;
 
 import br.cesjf.lp3.Filial;
+import br.cesjf.lp3.Produto;
 import br.cesjf.lp3.db.FilialJpaController;
+import br.cesjf.lp3.db.ProdutoJpaController;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,21 +14,27 @@ public class FormCadProduto extends javax.swing.JDialog {
 
     Filial filial;
     FilialJpaController filialJPA;
+    Produto produto;
+    ProdutoJpaController produtoJPA;
 
     public FormCadProduto(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
-        try {
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Não foi possível conectar ao banco!", "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
+
+        filial = new Filial();
+        filialJPA = new FilialJpaController();
+
+        cmbFilial.removeAllItems();
+        List<Filial> filiais = filialJPA.listAll();
+        for (Filial fil : filiais) {
+            cmbFilial.addItem(fil);
         }
-        atualizarTblEstoque();
     }
 
     public void LimparCampos() {
-        jCidade.setText("");
-        jBairro.setText("");
+        jTipo.setText("");
+        jQuantidade.setText("");
         jID.setText("");
     }
 
@@ -36,16 +44,18 @@ public class FormCadProduto extends javax.swing.JDialog {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jCidade = new javax.swing.JTextField();
+        jTipo = new javax.swing.JTextField();
         jNome = new javax.swing.JLabel();
-        jBairro = new javax.swing.JTextField();
+        jQuantidade = new javax.swing.JTextField();
         jID = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        cmbFilial = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
         jGravar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jSair = new javax.swing.JButton();
         jExcluir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblFilial = new javax.swing.JTable();
+        tblProduto = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLimpar = new javax.swing.JButton();
@@ -56,17 +66,17 @@ public class FormCadProduto extends javax.swing.JDialog {
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setText("Cidade:");
+        jLabel1.setText("Tipo:");
 
-        jCidade.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jTipo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         jNome.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jNome.setText("Bairro:");
+        jNome.setText("Quantidade:");
 
-        jBairro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jBairro.addFocusListener(new java.awt.event.FocusAdapter() {
+        jQuantidade.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jQuantidade.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                jBairroFocusLost(evt);
+                jQuantidadeFocusLost(evt);
             }
         });
 
@@ -76,39 +86,54 @@ public class FormCadProduto extends javax.swing.JDialog {
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("ID:");
 
+        cmbFilial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbFilialActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel4.setText("Filial:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
+                .addGap(22, 22, 22)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jID)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jID)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jNome)
-                        .addComponent(jCidade)
-                        .addComponent(jBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jTipo)
+                        .addComponent(jQuantidade, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbFilial, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cmbFilial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jNome)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addComponent(jQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
         );
 
         jLabel1.getAccessibleContext().setAccessibleName("");
@@ -121,11 +146,11 @@ public class FormCadProduto extends javax.swing.JDialog {
             }
         });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/img_sair.png"))); // NOI18N
-        jButton2.setText("Sair");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+        jSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/img_sair.png"))); // NOI18N
+        jSair.setText("Sair");
+        jSair.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
+                jSairMouseClicked(evt);
             }
         });
 
@@ -138,22 +163,22 @@ public class FormCadProduto extends javax.swing.JDialog {
             }
         });
 
-        tblFilial.setModel(new javax.swing.table.DefaultTableModel(
+        tblProduto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID", "Cidade", "Bairro"
+                "ID Filial", "Cidade/Bairro", "ID Produto", "Tipo", "Quantidade"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -164,13 +189,13 @@ public class FormCadProduto extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        tblFilial.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tblFilial.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblProduto.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblProduto.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblFilialMouseClicked(evt);
+                tblProdutoMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblFilial);
+        jScrollPane1.setViewportView(tblProduto);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -178,7 +203,7 @@ public class FormCadProduto extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 204, 204));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/tela_cliente.jpg"))); // NOI18N
-        jLabel2.setText("       Cadastro");
+        jLabel2.setText("             Cadastro");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -197,6 +222,7 @@ public class FormCadProduto extends javax.swing.JDialog {
 
         jLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/btn_apagar.png"))); // NOI18N
         jLimpar.setText("  Limpar");
+        jLimpar.setPreferredSize(new java.awt.Dimension(93, 31));
         jLimpar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jLimparActionPerformed(evt);
@@ -211,16 +237,16 @@ public class FormCadProduto extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jExcluir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLimpar)
+                        .addComponent(jLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jGravar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jSair, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -231,12 +257,11 @@ public class FormCadProduto extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLimpar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jExcluir)
-                        .addComponent(jGravar)
-                        .addComponent(jButton2)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jExcluir)
+                    .addComponent(jGravar)
+                    .addComponent(jSair)
+                    .addComponent(jLimpar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -245,32 +270,33 @@ public class FormCadProduto extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+    private void jSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSairMouseClicked
         this.setVisible(false);
-    }//GEN-LAST:event_jButton2MouseClicked
+    }//GEN-LAST:event_jSairMouseClicked
 
 private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jGravarActionPerformed
+    produto = new Produto();
+    produtoJPA = new ProdutoJpaController();
 
-    filial = new Filial();
-    filialJPA = new FilialJpaController();
-    if ((jCidade.getText().equals("")) || (jBairro.getText().equals(""))) {
+    if ((jTipo.getText().equals("")) || (jQuantidade.getText().equals(""))) {
 
         JOptionPane.showMessageDialog(null, "Preenchimento obrigatório de todos os campos!",
                 "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
     } else {
 
-        filial.setCidade(jCidade.getText());
-        filial.setBairro(jBairro.getText());
+        filial = (Filial) cmbFilial.getSelectedItem();
+        produto.setTipo(jTipo.getText());
+        produto.setQuantidade(Integer.parseInt(jQuantidade.getText()));
+        produto.setFilial(filial);
         try {
-
             if (jID.getText().equals("")) {
-                filialJPA.create(filial);
-                JOptionPane.showMessageDialog(null, "Filial Cadastrada Com Sucesso!",
+                produtoJPA.create(produto);
+                JOptionPane.showMessageDialog(null, "Produto Cadastrado Com Sucesso!",
                         "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
             } else {
-                filial.setId(Long.parseLong(jID.getText()));
-                filialJPA.edit(filial);
-                JOptionPane.showMessageDialog(null, "Filial Alterada Com Sucesso!",
+                produto.setId(Long.parseLong(jID.getText()));
+                produtoJPA.edit(produto);
+                JOptionPane.showMessageDialog(null, "Produto Alterado Com Sucesso!",
                         "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
             }
             LimparCampos();
@@ -280,54 +306,59 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     }
 
     jExcluir.setEnabled(false);
-    atualizarTblEstoque();
 }//GEN-LAST:event_jGravarActionPerformed
 
     private void jExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jExcluirActionPerformed
-        filial = new Filial();
-        filialJPA = new FilialJpaController();
-
-        try {
-            filialJPA.excluir(Long.parseLong(jID.getText()));
-            JOptionPane.showMessageDialog(null, "Filial Excluída Com Sucesso!",
-                    "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
-            LimparCampos();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Não é possível excluir o Produto!\n" + ex.getMessage(), "Erro ao excluir Produto", JOptionPane.ERROR_MESSAGE);
-        }
-
-        jExcluir.setEnabled(false);
-        atualizarTblEstoque();
+//        filial = new Filial();
+//        filialJPA = new FilialJpaController();
+//
+//        try {
+//            filialJPA.excluir(Long.parseLong(jID.getText()));
+//            JOptionPane.showMessageDialog(null, "Filial Excluída Com Sucesso!",
+//                    "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
+//            LimparCampos();
+//        } catch (Exception ex) {
+//            JOptionPane.showMessageDialog(null, "Não é possível excluir o Produto!\n" + ex.getMessage(), "Erro ao excluir Produto", JOptionPane.ERROR_MESSAGE);
+//        }
+//
+//        jExcluir.setEnabled(false);
+//        atualizarTblProduto();
     }//GEN-LAST:event_jExcluirActionPerformed
 
-    private void jBairroFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jBairroFocusLost
-    }//GEN-LAST:event_jBairroFocusLost
+    private void jQuantidadeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jQuantidadeFocusLost
+    }//GEN-LAST:event_jQuantidadeFocusLost
 
-    private void tblFilialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblFilialMouseClicked
-        filial = new Filial();
-        filialJPA = new FilialJpaController();
-
-        int linha = tblFilial.getSelectedRow();
-        Long id = (Long) tblFilial.getModel().getValueAt(linha, 0);
-
-        try {
-            filial = filialJPA.buscaPorId(id);
-            jID.setText(String.valueOf(filial.getId()));
-            jCidade.setText(filial.getCidade());
-            jBairro.setText(filial.getBairro());
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Não foi possível recuperar o registro!\n" + ex.getMessage(), "Erro ao buscar o registro", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(FormCadProduto.class.getName()).log(Level.SEVERE, null, ex);
-            return;
-        }
-
-        jExcluir.setEnabled(true);
-    }//GEN-LAST:event_tblFilialMouseClicked
+    private void tblProdutoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProdutoMouseClicked
+//        produto = new Produto();
+//        produtoJPA = new ProdutoJpaController();
+//
+//        int linha = tblProduto.getSelectedRow();
+//        Long id = (Long) tblProduto.getModel().getValueAt(linha, 0);
+//
+//        try {
+//            filial = filialJPA.buscaPorId(id);
+//            jID.setText(String.valueOf(filial.getId()));
+//            jCidade.setText(filial.getCidade());
+//            jBairro.setText(filial.getBairro());
+//        } catch (Exception ex) {
+//            JOptionPane.showMessageDialog(null, "Não foi possível recuperar o registro!\n" + ex.getMessage(), "Erro ao buscar o registro", JOptionPane.ERROR_MESSAGE);
+//            Logger.getLogger(FormCadProduto.class.getName()).log(Level.SEVERE, null, ex);
+//            return;
+//        }
+//
+//        jExcluir.setEnabled(true);
+    }//GEN-LAST:event_tblProdutoMouseClicked
 
     private void jLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLimparActionPerformed
         LimparCampos();
         jExcluir.setEnabled(false);
     }//GEN-LAST:event_jLimparActionPerformed
+
+    private void cmbFilialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFilialActionPerformed
+        filial = new Filial();
+        filial = (Filial) cmbFilial.getSelectedItem();
+        atualizarTblProduto(filial);
+    }//GEN-LAST:event_cmbFilialActionPerformed
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -345,37 +376,42 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JTextField jBairro;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JTextField jCidade;
+    private javax.swing.JComboBox cmbFilial;
     private javax.swing.JButton jExcluir;
     private javax.swing.JButton jGravar;
     private javax.swing.JTextField jID;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JButton jLimpar;
     private javax.swing.JLabel jNome;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JTextField jQuantidade;
+    private javax.swing.JButton jSair;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblFilial;
+    private javax.swing.JTextField jTipo;
+    private javax.swing.JTable tblProduto;
     // End of variables declaration//GEN-END:variables
 
-    private void atualizarTblEstoque() {
-        filial = new Filial();
-        filialJPA = new FilialJpaController();
+    private void atualizarTblProduto(Filial filial) {
+        produto = new Produto();
+        produtoJPA = new ProdutoJpaController();
         
-        DefaultTableModel tm = (DefaultTableModel) tblFilial.getModel();
-        tm.getDataVector().removeAllElements();
+
+        DefaultTableModel tm = (DefaultTableModel) tblProduto.getModel();        
+        tm.getDataVector().removeAllElements();           
 
         try {
-            List<Filial> filiais = filialJPA.listAll();
-            for (Filial fil : filiais) {
+            List<Produto> produtos = produtoJPA.listarPorFilial(filial.getId());
+            for (Produto prod : produtos) {
                 tm.addRow(new Object[]{
-                            fil.getId(),
-                            fil.getCidade(),
-                            fil.getBairro()
+                            filial.getId(),
+                            filial.toString(),
+                            prod.getId(),
+                            prod.getTipo(),
+                            prod.getQuantidade()
                         });
             }
         } catch (Exception ex) {

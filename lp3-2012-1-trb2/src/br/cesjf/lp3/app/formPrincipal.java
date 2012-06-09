@@ -15,7 +15,7 @@ public class formPrincipal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         cCadastrar = new javax.swing.JMenuItem();
-        cTransferir = new javax.swing.JMenuItem();
+        cCadastrarProduto = new javax.swing.JMenuItem();
         jDesFilial = new javax.swing.JMenuItem();
         jRelatorio = new javax.swing.JMenu();
         jRelGeral = new javax.swing.JMenuItem();
@@ -36,13 +36,13 @@ public class formPrincipal extends javax.swing.JFrame {
         });
         jMenu1.add(cCadastrar);
 
-        cTransferir.setText("Transferir Produto");
-        cTransferir.addActionListener(new java.awt.event.ActionListener() {
+        cCadastrarProduto.setText("Cadastrar Produto");
+        cCadastrarProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cTransferirActionPerformed(evt);
+                cCadastrarProdutoActionPerformed(evt);
             }
         });
-        jMenu1.add(cTransferir);
+        jMenu1.add(cCadastrarProduto);
 
         jDesFilial.setText("Desativar Filial");
         jDesFilial.addActionListener(new java.awt.event.ActionListener() {
@@ -112,9 +112,11 @@ private void cCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         frp.setVisible(true);
 }//GEN-LAST:event_cCadastrarActionPerformed
 
-    private void cTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cTransferirActionPerformed
-      
-    }//GEN-LAST:event_cTransferirActionPerformed
+    private void cCadastrarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cCadastrarProdutoActionPerformed
+        FormCadProduto frp = new FormCadProduto(this, true);
+        frp.setLocationRelativeTo(null);
+        frp.setVisible(true);
+    }//GEN-LAST:event_cCadastrarProdutoActionPerformed
 
     private void jDesFilialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDesFilialActionPerformed
       
@@ -141,7 +143,7 @@ private void cCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem cCadastrar;
-    private javax.swing.JMenuItem cTransferir;
+    private javax.swing.JMenuItem cCadastrarProduto;
     private javax.swing.JMenuItem jDesFilial;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;

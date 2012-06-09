@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.cesjf.lp3.db;
 
 import br.cesjf.lp3.Filial;
@@ -16,10 +12,7 @@ import java.util.List;
 import javax.persistence.*;
 import javax.transaction.UserTransaction;
 
-/**
- *
- * @author Leandro
- */
+
 public class FilialJpaController implements Serializable {
 
     public FilialJpaController(UserTransaction utx, EntityManagerFactory emf) {
