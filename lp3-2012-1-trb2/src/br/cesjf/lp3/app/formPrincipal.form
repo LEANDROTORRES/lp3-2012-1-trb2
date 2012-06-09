@@ -25,13 +25,18 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cCadastrarProdutoActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jTransProduto">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Transferir Produtos"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTransProdutoActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jDesFilial">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Desativar Filial"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jDesFilialActionPerformed"/>
-              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

@@ -2,13 +2,12 @@ package br.cesjf.lp3.app;
 
 import javax.swing.JFrame;
 
-
 public class formPrincipal extends javax.swing.JFrame {
-    
+
     public formPrincipal() {
         initComponents();
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);        
-    }   
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -16,6 +15,7 @@ public class formPrincipal extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         cCadastrar = new javax.swing.JMenuItem();
         cCadastrarProduto = new javax.swing.JMenuItem();
+        jTransProduto = new javax.swing.JMenuItem();
         jDesFilial = new javax.swing.JMenuItem();
         jRelatorio = new javax.swing.JMenu();
         jRelGeral = new javax.swing.JMenuItem();
@@ -44,12 +44,15 @@ public class formPrincipal extends javax.swing.JFrame {
         });
         jMenu1.add(cCadastrarProduto);
 
-        jDesFilial.setText("Desativar Filial");
-        jDesFilial.addActionListener(new java.awt.event.ActionListener() {
+        jTransProduto.setText("Transferir Produtos");
+        jTransProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jDesFilialActionPerformed(evt);
+                jTransProdutoActionPerformed(evt);
             }
         });
+        jMenu1.add(jTransProduto);
+
+        jDesFilial.setText("Desativar Filial");
         jMenu1.add(jDesFilial);
 
         jMenuBar1.add(jMenu1);
@@ -107,9 +110,9 @@ public class formPrincipal extends javax.swing.JFrame {
 }//GEN-LAST:event_jSairMouseClicked
 
 private void cCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cCadastrarActionPerformed
-        FormCadFilial frp = new FormCadFilial(this, true);
-        frp.setLocationRelativeTo(null);
-        frp.setVisible(true);
+    FormCadFilial frp = new FormCadFilial(this, true);
+    frp.setLocationRelativeTo(null);
+    frp.setVisible(true);
 }//GEN-LAST:event_cCadastrarActionPerformed
 
     private void cCadastrarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cCadastrarProdutoActionPerformed
@@ -118,21 +121,21 @@ private void cCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         frp.setVisible(true);
     }//GEN-LAST:event_cCadastrarProdutoActionPerformed
 
-    private void jDesFilialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDesFilialActionPerformed
-      
-    }//GEN-LAST:event_jDesFilialActionPerformed
+    private void jTransProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTransProdutoActionPerformed
+        FormTransProduto frp = new FormTransProduto(this, true);
+        frp.setLocationRelativeTo(null);
+        frp.setVisible(true);
+    }//GEN-LAST:event_jTransProdutoActionPerformed
 
     private void jRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRelatorioActionPerformed
     }//GEN-LAST:event_jRelatorioActionPerformed
 
     private void jRelGeralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRelGeralActionPerformed
-       
     }//GEN-LAST:event_jRelGeralActionPerformed
 
     private void jRelEstoquesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRelEstoquesActionPerformed
-      
     }//GEN-LAST:event_jRelEstoquesActionPerformed
-   
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -151,5 +154,6 @@ private void cCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JMenuItem jRelGeral;
     private javax.swing.JMenu jRelatorio;
     private javax.swing.JMenu jSair;
+    private javax.swing.JMenuItem jTransProduto;
     // End of variables declaration//GEN-END:variables
 }
