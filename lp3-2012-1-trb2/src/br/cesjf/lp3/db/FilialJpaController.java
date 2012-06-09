@@ -107,7 +107,7 @@ public class FilialJpaController implements Serializable {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Long id = filial.getId();
-                if (findFilial(id) == null) {
+                if (buscaPorId(id) == null) {
                     throw new NonexistentEntityException("The filial with id " + id + " no longer exists.");
                 }
             }
@@ -119,7 +119,7 @@ public class FilialJpaController implements Serializable {
         }
     }
 
-    public void destroy(Long id) throws NonexistentEntityException {
+    public void excluir(Long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -167,7 +167,7 @@ public class FilialJpaController implements Serializable {
         }
     }
 
-    public Filial findFilial(Long id) {
+    public Filial buscaPorId(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Filial.class, id);

@@ -8,12 +8,12 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class FormCadFilial extends javax.swing.JDialog {
+public class FormCadProduto extends javax.swing.JDialog {
 
     Filial filial;
     FilialJpaController filialJPA;
 
-    public FormCadFilial(java.awt.Frame parent, boolean modal) {
+    public FormCadProduto(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
@@ -231,11 +231,12 @@ public class FormCadFilial extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jExcluir)
-                    .addComponent(jGravar)
-                    .addComponent(jButton2)
-                    .addComponent(jLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLimpar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jExcluir)
+                        .addComponent(jGravar)
+                        .addComponent(jButton2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -316,7 +317,7 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             jBairro.setText(filial.getBairro());
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Não foi possível recuperar o registro!\n" + ex.getMessage(), "Erro ao buscar o registro", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(FormCadFilial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FormCadProduto.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
 
@@ -331,7 +332,7 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                FormCadFilial dialog = new FormCadFilial(new javax.swing.JFrame(), true);
+                FormCadProduto dialog = new FormCadProduto(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -379,7 +380,7 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Não foi possível listar os registros!\n" + ex.getMessage(), "Erro ao listar", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(FormCadFilial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FormCadProduto.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
 
