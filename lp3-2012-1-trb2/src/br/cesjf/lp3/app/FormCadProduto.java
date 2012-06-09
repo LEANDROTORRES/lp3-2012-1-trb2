@@ -304,49 +304,51 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             JOptionPane.showMessageDialog(null, "Não é possível cadastrar a Filial!\n" + ex.getMessage(), "Erro ao cadastrar Filial", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    atualizarTblProduto(filial);
     jExcluir.setEnabled(false);
 }//GEN-LAST:event_jGravarActionPerformed
 
     private void jExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jExcluirActionPerformed
-//        filial = new Filial();
-//        filialJPA = new FilialJpaController();
-//
-//        try {
-//            filialJPA.excluir(Long.parseLong(jID.getText()));
-//            JOptionPane.showMessageDialog(null, "Filial Excluída Com Sucesso!",
-//                    "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
-//            LimparCampos();
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(null, "Não é possível excluir o Produto!\n" + ex.getMessage(), "Erro ao excluir Produto", JOptionPane.ERROR_MESSAGE);
-//        }
-//
-//        jExcluir.setEnabled(false);
-//        atualizarTblProduto();
+        produto = new Produto();
+        produtoJPA = new ProdutoJpaController();
+        
+        filial = (Filial) cmbFilial.getSelectedItem();
+
+        try {
+            produtoJPA.excluir(Long.parseLong(jID.getText()));
+            JOptionPane.showMessageDialog(null, "Produto Excluído Com Sucesso!",
+                    "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
+            LimparCampos();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Não é possível excluir o Produto!\n" + ex.getMessage(), "Erro ao excluir Produto", JOptionPane.ERROR_MESSAGE);
+        }
+
+        jExcluir.setEnabled(false);
+        atualizarTblProduto(filial);
     }//GEN-LAST:event_jExcluirActionPerformed
 
     private void jQuantidadeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jQuantidadeFocusLost
     }//GEN-LAST:event_jQuantidadeFocusLost
 
     private void tblProdutoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProdutoMouseClicked
-//        produto = new Produto();
-//        produtoJPA = new ProdutoJpaController();
-//
-//        int linha = tblProduto.getSelectedRow();
-//        Long id = (Long) tblProduto.getModel().getValueAt(linha, 0);
-//
-//        try {
-//            filial = filialJPA.buscaPorId(id);
-//            jID.setText(String.valueOf(filial.getId()));
-//            jCidade.setText(filial.getCidade());
-//            jBairro.setText(filial.getBairro());
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(null, "Não foi possível recuperar o registro!\n" + ex.getMessage(), "Erro ao buscar o registro", JOptionPane.ERROR_MESSAGE);
-//            Logger.getLogger(FormCadProduto.class.getName()).log(Level.SEVERE, null, ex);
-//            return;
-//        }
-//
-//        jExcluir.setEnabled(true);
+        produto = new Produto();
+        produtoJPA = new ProdutoJpaController();
+
+        int linha = tblProduto.getSelectedRow();
+        Long id = (Long) tblProduto.getModel().getValueAt(linha, 2);
+
+        try {
+            produto = produtoJPA.buscaPorID(id);
+            jID.setText(String.valueOf(produto.getId()));
+            jTipo.setText(produto.getTipo());
+            jQuantidade.setText(String.valueOf(produto.getQuantidade()));
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível recuperar o registro!\n" + ex.getMessage(), "Erro ao buscar o registro", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(FormCadProduto.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+
+        jExcluir.setEnabled(true);
     }//GEN-LAST:event_tblProdutoMouseClicked
 
     private void jLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLimparActionPerformed
@@ -355,6 +357,8 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     }//GEN-LAST:event_jLimparActionPerformed
 
     private void cmbFilialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFilialActionPerformed
+        LimparCampos();
+        jExcluir.setEnabled(false);
         filial = new Filial();
         filial = (Filial) cmbFilial.getSelectedItem();
         atualizarTblProduto(filial);
@@ -398,10 +402,10 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void atualizarTblProduto(Filial filial) {
         produto = new Produto();
         produtoJPA = new ProdutoJpaController();
-        
 
-        DefaultTableModel tm = (DefaultTableModel) tblProduto.getModel();        
-        tm.getDataVector().removeAllElements();           
+
+        DefaultTableModel tm = (DefaultTableModel) tblProduto.getModel();
+        tm.getDataVector().removeAllElements();
 
         try {
             List<Produto> produtos = produtoJPA.listarPorFilial(filial.getId());
