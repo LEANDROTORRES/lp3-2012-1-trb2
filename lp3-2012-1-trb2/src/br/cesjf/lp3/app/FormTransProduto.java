@@ -4,6 +4,7 @@ import br.cesjf.lp3.Filial;
 import br.cesjf.lp3.Produto;
 import br.cesjf.lp3.db.FilialJpaController;
 import br.cesjf.lp3.db.ProdutoJpaController;
+import br.cesjf.lp3.db.exceptions.NonexistentEntityException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +27,7 @@ public class FormTransProduto extends javax.swing.JDialog {
         filialJPA = new FilialJpaController();
 
         jFilialOrigem.removeAllItems();
+        jFilialDestino.removeAllItems();
         List<Filial> filiais = filialJPA.listAll();
         for (Filial fil : filiais) {
             jFilialOrigem.addItem(fil);
@@ -38,8 +40,8 @@ public class FormTransProduto extends javax.swing.JDialog {
         jQuantidadeD.setText("");
         jQuantidadeT.setText("");
         jTipo.setText("");
-        jFilialDestino.setSelectedIndex(0);
-        jFilialOrigem.setSelectedIndex(0);
+//        jFilialDestino.setSelectedIndex(0);
+//        jFilialOrigem.setSelectedIndex(0);
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -278,6 +280,13 @@ public class FormTransProduto extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2MouseClicked
 
 private void jTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTransferirActionPerformed
+    Filial filialDestino;
+    filialDestino = new Filial();
+    Produto produtoDestino;
+    produtoDestino = new Produto();
+    produto = new Produto();
+    produtoJPA = new ProdutoJpaController();
+
     if (jFilialOrigem.getSelectedItem().equals(jFilialDestino.getSelectedItem())) {
         JOptionPane.showMessageDialog(null, "A Filial de Destino Deve ser Diferente da Filial de Origem!",
                 "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
@@ -291,17 +300,29 @@ private void jTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                 "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
     } else {
 
-//        estoque.setFilial(String.valueOf(jFilialDestino.getSelectedItem()));
-//        estoque.setProduto(jProduto.getText());
-//        estoque.setQuantidade(Integer.parseInt(jQuantidadeT.getText()));
-//
-//        try {
-//            estoqueDao.transferir(String.valueOf(jFilialOrigem.getSelectedItem()), estoque);
-//            JOptionPane.showMessageDialog(null, "Produto Trnsferido Com Sucesso!", "Transferência Realizada", JOptionPane.INFORMATION_MESSAGE);
-//            LimparCampos();
-//        } catch (Exception ex) {
-//            Logger.getLogger(FormTransProduto.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        //Debita na Filial Destino
+        produto.setId(Long.parseLong(jID.getText()));
+        produto.setTipo(jTipo.getText());
+        filial = (Filial) jFilialOrigem.getSelectedItem();
+        produto.setFilial(filial);
+        produto.setQuantidade(Integer.parseInt(jQuantidadeD.getText()) - Integer.parseInt(jQuantidadeT.getText()));
+
+        //Credita na Filial Origem
+        produtoDestino.setId(Long.parseLong(jID.getText()));
+        produtoDestino.setTipo(jTipo.getText());
+        filialDestino = (Filial) jFilialDestino.getSelectedItem();
+        produtoDestino.setFilial(filialDestino);
+        produtoDestino.setQuantidade(Integer.parseInt(jQuantidadeT.getText()));
+
+        try {
+            produtoJPA.transferirProduto(produto, produtoDestino);
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(FormTransProduto.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(FormTransProduto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
     }
 }//GEN-LAST:event_jTransferirActionPerformed
 
@@ -309,7 +330,7 @@ private void jTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     }//GEN-LAST:event_formWindowOpened
 
     private void jFilialOrigemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFilialOrigemActionPerformed
-        LimparCampos();        
+        LimparCampos();
         filial = new Filial();
         filial = (Filial) jFilialOrigem.getSelectedItem();
         atualizarTblProduto(filial);
@@ -320,7 +341,7 @@ private void jTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         produtoJPA = new ProdutoJpaController();
 
         int linha = tblProduto.getSelectedRow();
-        Long id = (Long) tblProduto.getModel().getValueAt(linha, 2);
+        Long id = (Long) tblProduto.getModel().getValueAt(linha, 0);
 
         try {
             produto = produtoJPA.buscaPorID(id);
@@ -331,11 +352,11 @@ private void jTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             JOptionPane.showMessageDialog(null, "Não foi possível recuperar o registro!\n" + ex.getMessage(), "Erro ao buscar o registro", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(FormCadProduto.class.getName()).log(Level.SEVERE, null, ex);
             return;
-        }        
+        }
     }//GEN-LAST:event_tblProdutoMouseClicked
 
     private void jLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLimparActionPerformed
-        LimparCampos();       
+        LimparCampos();
     }//GEN-LAST:event_jLimparActionPerformed
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -386,8 +407,6 @@ private void jTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             List<Produto> produtos = produtoJPA.listarPorFilial(filial.getId());
             for (Produto prod : produtos) {
                 tm.addRow(new Object[]{
-                            filial.getId(),
-                            filial.toString(),
                             prod.getId(),
                             prod.getTipo(),
                             prod.getQuantidade()

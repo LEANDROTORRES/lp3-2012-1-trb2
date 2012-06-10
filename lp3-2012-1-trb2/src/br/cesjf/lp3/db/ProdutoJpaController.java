@@ -114,7 +114,18 @@ public class ProdutoJpaController implements Serializable {
         }
     }
     
-    public List<Produto> findProdutoEntities() {
+    public List<Object> buscaTodosAgrupados() {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createQuery("SELECT o.tipo, SUM(o.quantidade) AS quantidade FROM Produto AS o GROUP BY o.tipo");
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+    
+    
+    public List<Produto> listAll() {
         return findProdutoEntities(true, -1, -1);
     }
     
@@ -145,7 +156,7 @@ public class ProdutoJpaController implements Serializable {
         } finally {
             em.close();
         }
-    }
+    } 
     
     public Produto buscaPorID(Long id) {
         EntityManager em = getEntityManager();
@@ -154,6 +165,28 @@ public class ProdutoJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    public List<Produto> buscaPorIDFilial(String tipo, Long filialId) {
+        EntityManager em = getEntityManager();
+        try {
+            Query q = em.createQuery("select object(o) from Produto as o WHERE o.filial.id = 4");
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public void transferirProduto(Produto produtoOrigem, Produto produtoDestino) throws NonexistentEntityException, Exception{
+        //edit(produtoOrigem);
+        
+//        List<Produto> prod = buscaPorIDFilial(produtoDestino.getTipo(), produtoDestino.getFilial().getId());
+//        if (prod != null){
+//            prod.setQuantidade(prod.getQuantidade() + produtoDestino.getQuantidade());
+//            edit(prod);            
+//        }else{
+//            create(prod);
+//        }
     }
     
     public int getProdutoCount() {
