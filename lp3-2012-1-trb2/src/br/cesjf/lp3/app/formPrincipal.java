@@ -53,6 +53,11 @@ public class formPrincipal extends javax.swing.JFrame {
         jMenu1.add(jTransProduto);
 
         jDesFilial.setText("Desativar Filial");
+        jDesFilial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jDesFilialActionPerformed(evt);
+            }
+        });
         jMenu1.add(jDesFilial);
 
         jMenuBar1.add(jMenu1);
@@ -131,10 +136,22 @@ private void cCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }//GEN-LAST:event_jRelatorioActionPerformed
 
     private void jRelGeralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRelGeralActionPerformed
+        FormRelProdutos frp = new FormRelProdutos(this, true);
+        frp.setLocationRelativeTo(null);
+        frp.setVisible(true);
     }//GEN-LAST:event_jRelGeralActionPerformed
 
     private void jRelEstoquesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRelEstoquesActionPerformed
+        FormRelEstoques frp = new FormRelEstoques();
+        frp.setLocationRelativeTo(null);
+        frp.setVisible(true);
     }//GEN-LAST:event_jRelEstoquesActionPerformed
+
+    private void jDesFilialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDesFilialActionPerformed
+        FormDesFilial frp = new FormDesFilial(this, true);
+        frp.setLocationRelativeTo(null);
+        frp.setVisible(true);
+    }//GEN-LAST:event_jDesFilialActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {

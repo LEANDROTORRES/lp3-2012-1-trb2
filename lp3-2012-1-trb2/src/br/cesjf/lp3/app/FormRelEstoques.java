@@ -1,6 +1,9 @@
 package br.cesjf.lp3.app;
 
-
+import br.cesjf.lp3.Filial;
+import br.cesjf.lp3.Produto;
+import br.cesjf.lp3.db.FilialJpaController;
+import br.cesjf.lp3.db.ProdutoJpaController;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,30 +15,26 @@ public class FormRelEstoques extends javax.swing.JFrame {
 
     private JTree tree;
     private DefaultMutableTreeNode noPai;
-//    Estoque estoque;
-//    EstoqueDAO estoqueDao;
-//    EstoqueDAO estoqueDAO2;
-//    List<Estoque> estoques;
-//    List<Estoque> estoques2;
+    Filial filial;
+    FilialJpaController filialJPA;
+    Produto produto;
+    ProdutoJpaController produtoJPA;
 
     public FormRelEstoques() {
         initComponents();
         CriaArvore();
 
+        filial = new Filial();
+        filialJPA = new FilialJpaController();
+        produto = new Produto();
+        produtoJPA = new ProdutoJpaController();
+
         try {
-//            estoque = new Estoque();
-//            estoqueDao = new EstoqueDAO();
-//            estoqueDAO2 = new EstoqueDAO();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Não foi possível conectar ao banco!", "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        try {
-//            estoques = estoqueDao.listAllCombo();
-//
-//            for (Estoque est : estoques) {
-//                addFilho(est.getFilial());
-//            }
+            List<Filial> filiais = filialJPA.listAll();
+
+            for (Filial fil : filiais) {
+                addFilho(fil.getCidade() + " - " + fil.getBairro(), fil.getId());
+            }
         } catch (Exception ex) {
             Logger.getLogger(FormTransProduto.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -48,16 +47,17 @@ public class FormRelEstoques extends javax.swing.JFrame {
         repaint();
     }
 
-    private void addFilho(String no) {
-        DefaultMutableTreeNode filho = new DefaultMutableTreeNode(no);        
+    private void addFilho(String no, Long id) {
+        DefaultMutableTreeNode filho = new DefaultMutableTreeNode(no);
         noPai.add(filho);
 
         try {
-            //estoques2 = estoqueDAO2.listProdutoFilial(no);
-            //for (Estoque est2 : estoques2) {
-                //DefaultMutableTreeNode neto = new DefaultMutableTreeNode(est2.getProduto() + " - " + est2.getQuantidade());
-                //filho.add(neto);
-            //}
+            List<Produto> produtos = produtoJPA.listarPorFilial(id);
+
+            for (Produto prod : produtos) {
+                DefaultMutableTreeNode neto = new DefaultMutableTreeNode(prod.getTipo() + " - " + prod.getQuantidade());
+                filho.add(neto);
+            }
         } catch (Exception ex) {
             Logger.getLogger(FormRelEstoques.class.getName()).log(Level.SEVERE, null, ex);
         }
