@@ -11,22 +11,22 @@ import javax.persistence.*;
 import javax.transaction.UserTransaction;
 
 public class ProdutoJpaController implements Serializable {
-    
+
     public ProdutoJpaController(UserTransaction utx, EntityManagerFactory emf) {
         this.utx = utx;
         this.emf = emf;
     }
     private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
-    
+
     public ProdutoJpaController() {
         emf = Persistence.createEntityManagerFactory("lp3-2012-1-trb2-pu");
     }
-    
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-    
+
     public void create(Produto produto) {
         EntityManager em = null;
         try {
@@ -49,7 +49,7 @@ public class ProdutoJpaController implements Serializable {
             }
         }
     }
-    
+
     public void edit(Produto produto) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
@@ -87,7 +87,7 @@ public class ProdutoJpaController implements Serializable {
             }
         }
     }
-    
+
     public void excluir(Long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -113,7 +113,7 @@ public class ProdutoJpaController implements Serializable {
             }
         }
     }
-    
+
     public List<Object> buscaTodosAgrupados() {
         EntityManager em = getEntityManager();
         try {
@@ -123,16 +123,15 @@ public class ProdutoJpaController implements Serializable {
             em.close();
         }
     }
-    
-    
+
     public List<Produto> listAll() {
         return findProdutoEntities(true, -1, -1);
     }
-    
+
     public List<Produto> findProdutoEntities(int maxResults, int firstResult) {
         return findProdutoEntities(false, maxResults, firstResult);
     }
-    
+
     private List<Produto> findProdutoEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
@@ -146,50 +145,73 @@ public class ProdutoJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public List<Produto> listarPorFilial(Long filial) {
         EntityManager em = getEntityManager();
         try {
-            Query q = em.createQuery("select object(o) from Produto as o WHERE o.filial.id = " + filial);            
+            Query q = em.createQuery("select object(o) from Produto as o WHERE o.filial.id = " + filial);
             return q.getResultList();
-            
+
         } finally {
             em.close();
         }
-    } 
-    
+    }
+
     public Produto buscaPorID(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Produto.class, id);            
+            return em.find(Produto.class, id);
         } finally {
             em.close();
         }
     }
-    
-    public void transferirProduto(Produto produtoOrigem, Produto produtoDestino) throws NonexistentEntityException, Exception{
-        //EntityManager em = null;
-        //em.getTransaction().begin();
+
+    public void transferirProduto(Produto produtoOrigem, Produto produtoDestino) throws NonexistentEntityException, Exception {
+        EntityManager em = getEntityManager();
+
+        em.getTransaction().begin();
         edit(produtoOrigem);
-        create(produtoDestino);
-        //em.getTransaction().commit();
+        Produto prod = buscaPorIDFilial(produtoOrigem.getTipo(), produtoDestino.getFilial().getId());
+        if (prod != null) {
+            prod.setQuantidade(prod.getQuantidade() + produtoDestino.getQuantidade());
+            edit(prod);
+        } else {
+            create(produtoDestino);
+        }
+        em.getTransaction().commit();
     }
-    
+
     public Produto buscaPorIDFilial(String tipo, Long filialId) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Produto.class, 1);
-            
+            Query q = em.createQuery("select object(o) from Produto as o WHERE o.tipo = '" + tipo + "' AND o.filial.id = " + filialId);
+            try {
+                return ((Produto) q.getSingleResult());
+            } catch (Exception e) {
+                return null;
+            }
         } finally {
             em.close();
         }
     }
-    
-    public void desativarFilial(Produto produto, Filial filialDestino) throws NonexistentEntityException, Exception{
-        produto.setFilial(filialDestino);        
-        edit(produto);        
+
+    public void desativarFilial(Produto produto, Filial filialDestino) throws NonexistentEntityException, Exception {
+        EntityManager em = getEntityManager();
+        
+        em.getTransaction().begin();
+        produto.setFilial(filialDestino);
+        Produto prod = buscaPorIDFilial(produto.getTipo(), filialDestino.getId());
+        if (prod != null) {
+            prod.setFilial(filialDestino);
+            prod.setQuantidade(prod.getQuantidade() + produto.getQuantidade());
+            edit(prod);
+            excluir(produto.getId());
+        } else {
+            edit(produto);
+        }
+        em.getTransaction().commit();    
     }
-    
+
     public int getProdutoCount() {
         EntityManager em = getEntityManager();
         try {

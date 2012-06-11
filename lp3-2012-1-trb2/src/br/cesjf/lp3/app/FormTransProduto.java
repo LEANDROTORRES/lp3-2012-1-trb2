@@ -40,8 +40,6 @@ public class FormTransProduto extends javax.swing.JDialog {
         jQuantidadeD.setText("");
         jQuantidadeT.setText("");
         jTipo.setText("");
-//        jFilialDestino.setSelectedIndex(0);
-//        jFilialOrigem.setSelectedIndex(0);
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
