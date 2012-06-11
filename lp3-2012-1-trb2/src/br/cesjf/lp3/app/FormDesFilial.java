@@ -150,25 +150,27 @@ public class FormDesFilial extends javax.swing.JDialog {
 private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jGravarActionPerformed
     produto = new Produto();
     produtoJPA = new ProdutoJpaController();
+    Filial filialOrigem;
+    Filial filialDestino;
 
 
     if (jFilialOrigem.getSelectedItem().equals(jFilialDestino.getSelectedItem())) {
         JOptionPane.showMessageDialog(null, "A Filial de Destino Deve ser Diferente da Filial de Origem!",
                 "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
     } else {
-
-//        List<Estoque> estoques;
         try {
-//            estoques = estoqueDao.listProdutoFilial(jFilialOrigem.getSelectedItem().toString());
-//
-//            jStatus.append("Status da Desativação\n");
-//            for (Estoque est : estoques) {
-//                estoqueDao.desativar(est, jFilialDestino.getSelectedItem().toString());
-//
-//                jStatus.append("-----------------------------------------------------\n");
-//                jStatus.append("Produto: " + String.valueOf(est.getProduto() + " >>> Transferido\n"));
-//                jStatus.append("-----------------------------------------------------\n");
-//            }
+            filialOrigem = (Filial) jFilialOrigem.getSelectedItem();
+            filialDestino = (Filial) jFilialDestino.getSelectedItem();
+            List<Produto> produtos = produtoJPA.listarPorFilial(filialOrigem.getId());
+
+            jStatus.append("Status da Desativação\n");
+            for (Produto prod : produtos) {
+                produtoJPA.desativarFilial(prod, filialDestino);
+
+                jStatus.append("-----------------------------------------------------\n");
+                jStatus.append("Produto: " + String.valueOf(prod.getTipo() + " >>> Transferido\n"));
+                jStatus.append("-----------------------------------------------------\n");
+            }
 
             JOptionPane.showMessageDialog(null, "Filial Desativada com Sucesso!",
                     "Sucesso", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);

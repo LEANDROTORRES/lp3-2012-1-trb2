@@ -307,8 +307,7 @@ private void jTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         produto.setFilial(filial);
         produto.setQuantidade(Integer.parseInt(jQuantidadeD.getText()) - Integer.parseInt(jQuantidadeT.getText()));
 
-        //Credita na Filial Origem
-        produtoDestino.setId(Long.parseLong(jID.getText()));
+        //Credita na Filial Origem        
         produtoDestino.setTipo(jTipo.getText());
         filialDestino = (Filial) jFilialDestino.getSelectedItem();
         produtoDestino.setFilial(filialDestino);
@@ -316,13 +315,15 @@ private void jTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
         try {
             produtoJPA.transferirProduto(produto, produtoDestino);
+            JOptionPane.showMessageDialog(null, "Produto Transferido Com Sucesso!",
+                "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(FormTransProduto.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(FormTransProduto.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
+        
+        LimparCampos();
     }
 }//GEN-LAST:event_jTransferirActionPerformed
 

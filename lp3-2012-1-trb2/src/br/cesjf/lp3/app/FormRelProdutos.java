@@ -1,6 +1,5 @@
 package br.cesjf.lp3.app;
 
-
 import br.cesjf.lp3.Produto;
 import br.cesjf.lp3.db.ProdutoJpaController;
 import java.util.List;
@@ -8,14 +7,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FormRelProdutos extends javax.swing.JDialog {
-    
+
     Produto produto;
     ProdutoJpaController produtoJPA;
 
     public FormRelProdutos(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setLocationRelativeTo(null);   
+        setLocationRelativeTo(null);
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -111,14 +110,14 @@ public class FormRelProdutos extends javax.swing.JDialog {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         produto = new Produto();
         produtoJPA = new ProdutoJpaController();
-        
-        try {
-            List<Object> produtos = produtoJPA.buscaTodosAgrupados();
 
-            for (Object prod : produtos) {                
-                jRelatorio.append("Produto: " + prod.getClass().getCanonicalName() + "\n");
-                jRelatorio.append("Quantidade: " + prod.getClass().toString() + "\n");
-                jRelatorio.append("-------------------------------\n");                
+        try {
+            List<Produto> produtos = produtoJPA.listAll();
+
+            for (Produto prod : produtos) {
+                jRelatorio.append("Produto: " + prod.getTipo() + "\n");
+                jRelatorio.append("Quantidade: " + prod.getQuantidade() + "\n");
+                jRelatorio.append("-------------------------------\n");
             }
         } catch (Exception ex) {
             Logger.getLogger(FormTransProduto.class.getName()).log(Level.SEVERE, null, ex);

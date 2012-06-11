@@ -161,32 +161,33 @@ public class ProdutoJpaController implements Serializable {
     public Produto buscaPorID(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Produto.class, id);
-        } finally {
-            em.close();
-        }
-    }
-    
-    public List<Produto> buscaPorIDFilial(String tipo, Long filialId) {
-        EntityManager em = getEntityManager();
-        try {
-            Query q = em.createQuery("select object(o) from Produto as o WHERE o.filial.id = 4");
-            return q.getResultList();
+            return em.find(Produto.class, id);            
         } finally {
             em.close();
         }
     }
     
     public void transferirProduto(Produto produtoOrigem, Produto produtoDestino) throws NonexistentEntityException, Exception{
-        //edit(produtoOrigem);
-        
-//        List<Produto> prod = buscaPorIDFilial(produtoDestino.getTipo(), produtoDestino.getFilial().getId());
-//        if (prod != null){
-//            prod.setQuantidade(prod.getQuantidade() + produtoDestino.getQuantidade());
-//            edit(prod);            
-//        }else{
-//            create(prod);
-//        }
+        EntityManager em = null;
+        em.getTransaction().begin();
+        edit(produtoOrigem);
+        create(produtoDestino);
+        em.getTransaction().commit();
+    }
+    
+    public Produto buscaPorIDFilial(String tipo, Long filialId) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Produto.class, 1);
+            
+        } finally {
+            em.close();
+        }
+    }
+    
+    public void desativarFilial(Produto produto, Filial filialDestino) throws NonexistentEntityException, Exception{
+        produto.setFilial(filialDestino);        
+        edit(produto);        
     }
     
     public int getProdutoCount() {
