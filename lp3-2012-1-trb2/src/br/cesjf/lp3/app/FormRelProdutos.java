@@ -112,11 +112,15 @@ public class FormRelProdutos extends javax.swing.JDialog {
         produtoJPA = new ProdutoJpaController();
 
         try {
-            List<Produto> produtos = produtoJPA.listAll();
+            List<Object> produtos = produtoJPA.buscaTodosAgrupados();
+            Object[] obj = produtos.toArray();
 
-            for (Produto prod : produtos) {
-                jRelatorio.append("Produto: " + prod.getTipo() + "\n");
-                jRelatorio.append("Quantidade: " + prod.getQuantidade() + "\n");
+            for (int i = 0; i < obj.length; i++) {
+                Object[] o = (Object[]) obj[i];
+                String tipo = (String) o[0];
+                Long quantidade = (Long) o[1];
+                jRelatorio.append("Produto: " + tipo + "\n");
+                jRelatorio.append("Quantidade: " + quantidade + "\n");
                 jRelatorio.append("-------------------------------\n");
             }
         } catch (Exception ex) {
