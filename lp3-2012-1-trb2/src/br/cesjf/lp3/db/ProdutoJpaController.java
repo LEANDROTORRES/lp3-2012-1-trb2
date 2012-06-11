@@ -168,11 +168,11 @@ public class ProdutoJpaController implements Serializable {
     }
     
     public void transferirProduto(Produto produtoOrigem, Produto produtoDestino) throws NonexistentEntityException, Exception{
-        EntityManager em = null;
-        em.getTransaction().begin();
+        //EntityManager em = null;
+        //em.getTransaction().begin();
         edit(produtoOrigem);
         create(produtoDestino);
-        em.getTransaction().commit();
+        //em.getTransaction().commit();
     }
     
     public Produto buscaPorIDFilial(String tipo, Long filialId) {
