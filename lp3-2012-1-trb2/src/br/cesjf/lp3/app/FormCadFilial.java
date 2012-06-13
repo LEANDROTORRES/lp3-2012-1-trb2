@@ -47,7 +47,7 @@ public class FormCadFilial extends javax.swing.JDialog {
         jLimpar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Cadastro");
+        setTitle("Cadastro de Filial");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -174,7 +174,7 @@ public class FormCadFilial extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 204, 204));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/tela_cliente.jpg"))); // NOI18N
-        jLabel2.setText("       Cadastro");
+        jLabel2.setText("  Cadastro de Filial");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);

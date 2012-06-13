@@ -7,7 +7,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
-    <Property name="title" type="java.lang.String" value="Cadastro"/>
+    <Property name="title" type="java.lang.String" value="Cadastro de Filial"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -300,7 +300,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/img/tela_cliente.jpg"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="       Cadastro"/>
+            <Property name="text" type="java.lang.String" value="  Cadastro de Filial"/>
           </Properties>
         </Component>
       </SubComponents>
