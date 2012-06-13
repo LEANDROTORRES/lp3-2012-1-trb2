@@ -317,6 +317,8 @@ private void jTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         }
         
         LimparCampos();
+        atualizarTblProduto(filial);
+        jFilialDestino.setSelectedIndex(0);
     }
 }//GEN-LAST:event_jTransferirActionPerformed
 
